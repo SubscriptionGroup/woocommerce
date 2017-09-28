@@ -1362,11 +1362,38 @@ class WC_Admin_Setup_Wizard {
 		}
 	}
 
+	protected function wc_setup_activate_show_errors() {
+		if ( isset( $_GET['activate_error'] ) ) :
+			$error_message = $this->get_activate_error_message( $_GET['activate_error'] );
+		?>
+		<div class="woocommerce-error">
+			<p>
+				<?php echo wp_kses_post( $error_message ); ?>
+			</p>
+			<p class="wc-setup-actions">
+				<a
+					class="button"
+					href="<?php echo esc_url( $this->get_next_step_link() ); ?>">
+					<?php echo "Ok, I'll connect Jetpack later"; ?>
+				</a>
+			</p>
+			<p>
+				<span class="reconnect-reminder">
+					(Feeling lucky? You can also try connecting again below.)
+				</span>
+			</p>
+		</div>
+		<?php
+		endif;
+	}
+
 	/**
 	 * Activate step.
 	 */
 	public function wc_setup_activate() {
 		$this->wc_setup_activate_actions();
+
+		$this->wc_setup_activate_show_errors();
 
 		$description     = false;
 		$stripe_settings = get_option( 'woocommerce_stripe_settings', false );
